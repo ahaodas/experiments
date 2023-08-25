@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+        "moduleResolution": "Node",
+        "module": "es2022",
+        "baseUrl": ".",
+        "paths": {
+            "@remote-controller/*": ["./src/RemoteController/*"],
+            "@game-view/*": ["./src/GameView/*"],
+            "utils/*": ["./src/utils/*"]
+        }
+    }
+}

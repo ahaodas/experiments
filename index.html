@@ -1,41 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>WebRTC Demo</title>
-  </head>
-  <body>
-    <h2>1. Start your Webcam</h2>
-    <div class="videos">
-      <span>
-        <h3>Local Stream</h3>
-        <video id="webcamVideo" autoplay playsinline></video>
-      </span>
-      <span>
-        <h3>Remote Stream</h3>
-        <video id="remoteVideo" autoplay playsinline></video>
-      </span>
-
-
-    </div>
-
-    <button id="webcamButton">Start webcam</button>
-    <h2>2. Create a new Call</h2>
-    <button id="callButton" disabled>Create Call (offer)</button>
-
-    <h2>3. Join a Call</h2>
-    <p>Answer the call from a different browser window or device</p>
-    
-    <input id="callInput" />
-    <button id="answerButton" disabled>Answer</button>
-
-    <h2>4. Hangup</h2>
-
-    <button id="hangupButton" disabled>Hangup</button>
-
-    <script type="module" src="/main.js"></script>
-
-  </body>
+<!doctype html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Welcome to FirebaseRTC</title>
+        <link rel="stylesheet" type="text/css" href="src/GameView/desktopStyles.css" />
+    </head>
+    <body>
+        <!--<div class="editorUi_container">-->
+        <!--    <div class="col">-->
+        <!--        <label>rotateX<span id="rotateX"> </span>-->
+        <!--            <input type="range" min="-180" max="180" step="1" id="editorUirotateX" onchange="EditorUi()" tabindex="1">-->
+        <!--        </label>-->
+        <!--        <label>X-->
+        <!--            <input type="checkbox" id="editorUiVisibleX" onchange="EditorUi(this)" tabindex="7">-->
+        <!--        </label>-->
+        <!--    </div>-->
+        <!--    <div class="col">-->
+        <!--        <label>rotateY<span id="rotateY"> </span>-->
+        <!--            <input type="range" min="-180" max="180" step="1" id="editorUirotateY" onchange="EditorUi()" tabindex="2">-->
+        <!--        </label>-->
+        <!--        <label>Y-->
+        <!--            <input type="checkbox" id="editorUiVisibleY" onchange="EditorUi(this)" tabindex="8">-->
+        <!--        </label>-->
+        <!--    </div>-->
+        <!--    <div class="col">-->
+        <!--        <label>rotateZ<span id="rotateZ"> </span>-->
+        <!--            <input type="range" min="-180" max="180" step="1" id="editorUirotateZ" onchange="EditorUi()" tabindex="3">-->
+        <!--        </label>-->
+        <!--        <label>Z-->
+        <!--            <input type="checkbox" id="editorUiVisibleZ" onchange="EditorUi(this)" tabindex="9">-->
+        <!--        </label>-->
+        <!--    </div>-->
+        <!--    <div class="col">-->
+        <!--        <label>subscene-->
+        <!--            <input type="checkbox" id="subsceneVisible" onchange="EditorUi(this)">-->
+        <!--        </label>-->
+        <!--    </div>-->
+        <!--</div>-->
+        <div class="scene" id="scene">
+            <div class="reflectionContainer" id="mirror"></div>
+            <div class="scene scene_sub grid" id="subscene">
+                <!--.z-axis.axis-->
+                <!--.x-axis.axis-->
+                <!--.y-axis.axis-->
+                <div class="x-axis axis baseV2" id="spinbase"></div>
+                <div class="ufo">
+                    <div class="s sbc">back 🔜</div>
+                    <div class="s sf">front 🔜</div>
+                    <div class="s sl">left 🔜</div>
+                    <div class="s sr">right 🔜</div>
+                    <div class="s st">top 🔜</div>
+                    <div class="s sb">bottom 🔜</div>
+                </div>
+                <div class="ufo ufo2">
+                    <div class="s sbc">back 🔜</div>
+                    <div class="s sf">front 🔜</div>
+                    <div class="s sl">left 🔜</div>
+                    <div class="s sr">right 🔜</div>
+                    <div class="s st">top 🔜</div>
+                    <div class="s sb">bottom 🔜</div>
+                </div>
+            </div>
+            <div class="mc" id="ship">
+                <div class="c cl">
+                    <div class="s sbc"></div>
+                    <div class="s sf"></div>
+                    <div class="s sl"></div>
+                    <div class="s sr"></div>
+                    <div class="s st"></div>
+                    <div class="s sb"></div>
+                </div>
+                <div class="c cr">
+                    <div class="s sbc"></div>
+                    <div class="s sf"></div>
+                    <div class="s sl"></div>
+                    <div class="s sr"></div>
+                    <div class="s st"></div>
+                    <div class="s sb"></div>
+                </div>
+                <div class="c cm oppo">
+                    <div class="s sbc"></div>
+                    <div class="s sf"></div>
+                    <div class="s sl"></div>
+                    <div class="s sr"></div>
+                    <div class="s st"></div>
+                    <div class="s sb"></div>
+                </div>
+            </div>
+        </div>
+        <script type="module" src="/app.ts"></script>
+    </body>
 </html>

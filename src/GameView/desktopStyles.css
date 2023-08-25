@@ -1,0 +1,338 @@
+body {
+    transform-style: preserve-3d;
+    width: 100vw;
+    perspective: 1000px;
+    height: 100vh;
+    overflow: hidden;
+    background: black;
+}
+.scene {
+    visibility: hidden;
+    position: absolute;
+    bottom: 0;
+    transform-style: preserve-3d;
+    height: 100vh;
+    width: 100vw;
+    margin: auto;
+    display: flex;
+    justify-content: space-around;
+    transition: transform .2s ease;
+}
+.scene.scene_sub {
+    position: absolute;
+}
+.scene.scene_sub .axis {
+    outline: 1px solid magenta;
+    background-image: linear-gradient(to right, magenta 1px, transparent 1px), linear-gradient(to bottom, magenta 1px, transparent 1px);
+}
+.scene .axis {
+    outline: 1px solid gray;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    transform-style: preserve-3d;
+    opacity: .4;
+    background-size: 40px 40px;
+    background-image: linear-gradient(to right, grey 1px, transparent 1px), linear-gradient(to bottom, grey 1px, transparent 1px);
+}
+.scene .axis:not(.axis_sub).base {
+    transform-origin: 0 100%;
+    width: 220%;
+    background-size: 2% 8%;
+    background-image: linear-gradient(to right, magenta 1px, transparent 2px), linear-gradient(to bottom, magenta 6px, transparent 6px);
+}
+.scene .axis:not(.axis_sub).baseV2 {
+    transform-origin: 50% 100px;
+    width: 400vw;
+    height: 400vw;
+    background-size: 2% 2%;
+    background-image: linear-gradient(to right, magenta 4%, transparent 0%), linear-gradient(to bottom, magenta 1%, transparent 2%);
+    outline: none;
+}
+.scene .z-axis {
+    transform: rotateZ(90deg);
+}
+.scene .x-axis {
+    transform: rotateX(90deg);
+}
+.scene .x-axis.baseV2 {
+    transform: rotateX(90deg) translateZ(-50vw) translateY(-200vw);
+}
+.scene .x-axis .field {
+    width: 100vw;
+    height: 100vw;
+    transform: rotateZ(90deg) translateZ(-200px);
+}
+.scene .y-axis {
+    transform: rotateY(90deg);
+}
+.scene.hidden,
+.hidden .scene {
+    outline: none;
+}
+.scene.hidden .axis,
+.hidden .scene .axis {
+    display: none;
+    outline: none;
+}
+.mc {
+    transform: rotate3d(1, 0, 0, 45deg) translateZ(-300px);
+    transform-style: preserve-3d;
+    transform-origin: 50% 50% -300px;
+    width: 600px;
+    transition: transform .2s ease;
+    align-self: center;
+}
+.c {
+
+    transform-style: preserve-3d;
+    position: absolute;
+    transform-origin: 0 50% -50px;
+    height: 20px;
+    width: 100px;
+    transition: .3s ease;
+}
+.cr .s,
+.cl .s {
+    overflow: hidden;
+    position: absolute;
+    outline: 1px solid cyan;
+    box-shadow: 0 0 20px cyan;
+}
+.cr .sf,
+.cl .sf,
+.cr .sbc,
+.cl .sbc,
+.cr .sl,
+.cl .sl,
+.cr .sr,
+.cl .sr {
+    height: 100%;
+}
+.cr .sf,
+.cl .sf,
+.cr .sbc,
+.cl .sbc,
+.cr .st,
+.cl .st,
+.cr .sb,
+.cl .sb {
+    width: 100%;
+}
+.cr .sl,
+.cl .sl,
+.cr .sr,
+.cl .sr {
+    width: 600px;
+}
+.cr .st,
+.cl .st,
+.cr .sb,
+.cl .sb {
+    height: 600px;
+}
+.cr .sl,
+.cl .sl {
+    transform-origin: 0 50%;
+    transform: rotateY(90deg);
+}
+.cr .sr,
+.cl .sr {
+    right: 0;
+    transform-origin: 100% 50%;
+    transform: rotateY(-90deg);
+}
+.cr .st,
+.cl .st {
+    transform-origin: 0 0;
+    transform: rotateX(-90deg);
+}
+.cr .sb,
+.cl .sb {
+    bottom: 0;
+    transform-origin: 0 100%;
+    transform: rotateX(90deg);
+}
+.cr .sbc,
+.cl .sbc {
+    transform: translateZ(-600px);
+}
+.cr .st,
+.cl .st,
+.cr .sb,
+.cl .sb {
+    perspective: 0;
+}
+.cr .st:after,
+.cl .st:after,
+.cr .sb:after,
+.cl .sb:after {
+    content: '';
+    height: 100%;
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    outline: 100px solid cyan;
+}
+.cr .sf,
+.cl .sf {
+    background: cyan !important;
+}
+.cl .st:after {
+    transform: rotateZ(-191deg);
+}
+.cl .sb:after {
+    transform: rotateZ(191deg);
+}
+.cr {
+    left: 500px;
+}
+.cr .st:after {
+    transform: rotateZ(191deg);
+}
+.cr .sb:after {
+    transform: rotateZ(-191deg);
+}
+.cm {
+    left: 100px;
+    width: 400px;
+    height: 40px;
+}
+.cm .s {
+    overflow: hidden;
+    position: absolute;
+    outline: 1px solid cyan;
+    box-shadow: 0 0 20px cyan;
+}
+.cm .sf,
+.cm .sbc,
+.cm .sl,
+.cm .sr {
+    height: 100%;
+}
+.cm .sf,
+.cm .sbc,
+.cm .st,
+.cm .sb {
+    width: 100%;
+}
+.cm .sl,
+.cm .sr {
+    width: 150px;
+}
+.cm .st,
+.cm .sb {
+    height: 150px;
+}
+.cm .sl {
+    transform-origin: 0 50%;
+    transform: rotateY(90deg);
+}
+.cm .sr {
+    right: 0;
+    transform-origin: 100% 50%;
+    transform: rotateY(-90deg);
+}
+.cm .st {
+    transform-origin: 0 0;
+    transform: rotateX(-90deg);
+}
+.cm .sb {
+    bottom: 0;
+    transform-origin: 0 100%;
+    transform: rotateX(90deg);
+}
+.cm .sbc {
+    transform: translateZ(-150px);
+}
+.editorUi_container {
+    display: flex;
+    position: absolute;
+    top: 0;
+    left: 0;
+    opacity: .8;
+    z-index: 99;
+}
+.editorUi_container .col {
+    width: 20%;
+}
+.editorUi_container label {
+    color: cyan;
+}
+.editorUi_container input[type="range"] {
+    -webkit-appearance: none;
+    background: magenta;
+    height: 2px;
+}
+.ufo {
+    position: absolute;
+    transform-style: preserve-3d;
+    height: 100px;
+    width: 300px;
+    top: 30%;
+    right: 30%;
+    transform: translateZ(-1000px);
+}
+.ufo .s {
+    overflow: hidden;
+    position: absolute;
+    outline: 1px solid tomato;
+    box-shadow: 0 0 20px tomato;
+}
+.ufo .sf,
+.ufo .sbc,
+.ufo .sl,
+.ufo .sr {
+    height: 100%;
+}
+.ufo .sf,
+.ufo .sbc,
+.ufo .st,
+.ufo .sb {
+    width: 100%;
+}
+.ufo .sl,
+.ufo .sr {
+    width: 300px;
+}
+.ufo .st,
+.ufo .sb {
+    height: 300px;
+}
+.ufo .sl {
+    transform-origin: 0 50%;
+    transform: rotateY(90deg);
+}
+.ufo .sr {
+    right: 0;
+    transform-origin: 100% 50%;
+    transform: rotateY(-90deg);
+}
+.ufo .st {
+    transform-origin: 0 0;
+    transform: rotateX(-90deg);
+}
+.ufo .sb {
+    bottom: 0;
+    transform-origin: 0 100%;
+    transform: rotateX(90deg);
+}
+.ufo .sbc {
+    transform: translateZ(-300px);
+}
+.ufo2 {
+    height: 150px;
+    width: 500px;
+    top: 10%;
+    right: 60%;
+    transform: translateZ(-600px);
+}
+@keyframes fly {
+    0% {
+        transform: translateZ(-1000px);
+    }
+    100% {
+        transform: translateZ(500px);
+    }
+}

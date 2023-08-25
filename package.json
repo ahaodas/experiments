@@ -2,14 +2,25 @@
   "name": "webrtc-demo",
   "version": "0.0.0",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "serve": "vite preview"
   },
   "devDependencies": {
-    "vite": "^2.0.5"
+    "vite": "4.0.5"
   },
   "dependencies": {
-    "firebase": "^8.2.10"
+    "@vitejs/plugin-basic-ssl": "^1.0.1",
+    "firebase": "^10.1.0",
+    "material-components-web": "^14.0.0",
+    "prettier": "^3.0.2",
+    "qrcode": "^1.5.3"
+  },
+  "overrides": {
+    "@firebase/firestore": {
+      "@grpc/proto-loader": {
+        "protobufjs": "7.2.4"
+      }
+    }
   }
 }
