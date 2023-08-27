@@ -1,6 +1,6 @@
 import React from 'react'
 import { Outlet, RouterProvider } from 'react-router'
-import { createBrowserRouter, Link } from 'react-router-dom'
+import { createBrowserRouter, createHashRouter, Link} from 'react-router-dom'
 import firebase from 'utils/FireBase/firebaseInit'
 import { ConnectionService } from 'utils/connection/ConnectionService'
 import { createRoot } from 'react-dom/client'
@@ -10,7 +10,9 @@ import OuterLayout from 'components/OuterLayout'
 import InnerLayout from "components/InnerLayout";
 import ConnectionContext from 'utils/connection/ConnectionContext'
 
-export const router = createBrowserRouter([
+
+const createRouter = import.meta.env.MODE === 'development' ? createBrowserRouter : createHashRouter
+export const router = createRouter([
     {
         path: '/experiments',
         element: (
