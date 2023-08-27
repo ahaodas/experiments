@@ -16,20 +16,23 @@ const RemoteControlView = () => {
     const [connected, setConnected] = useState(false)
     const [channel, setChannel] = useState(null)
     const [active, setActive] = useState(false)
+    const [gameOver, setGameOver] = useState(false)
     const { raceId } = useParams()
     useEffect(() => {
         raceId &&
             connectionService
                 .joinRoom(raceId)
                 .catch(console.log)
-                .then(() =>
+                .then(() => {
+                    setGameOver(false)
                     connectionService.setDataChannelSubscriptions(channel => ({
                         onopen: () => {
                             setConnected(true)
                             setChannel(channel)
                         },
+                        onclose: () => setGameOver(true),
                     }))
-                )
+                })
     }, [Boolean(raceId)])
 
     useEffect(
@@ -63,7 +66,9 @@ const RemoteControlView = () => {
 
     return (
         <div className={cn(styles.root, { [styles.active]: active })}>
-            {connected ? (
+            {gameOver ? (
+                <div className={styles.loader}>lost connection</div>
+            ) : connected ? (
                 <Toggle id="main toggle" onChange={setActive} value={active} />
             ) : (
                 <div className={styles.loader}>Connecting...</div>

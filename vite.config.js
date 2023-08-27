@@ -1,9 +1,10 @@
 import { defineConfig } from 'vite'
 import basicSsl from '@vitejs/plugin-basic-ssl'
 import path from 'path'
+import { BASE_URL } from './constants'
 
 export default defineConfig({
-    base: '/experiments/',
+    base: `/${BASE_URL}/`,
     server: {
         https: true,
     },
