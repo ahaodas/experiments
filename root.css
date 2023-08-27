@@ -1,0 +1,10 @@
+body {
+    font-family: 'Press Start 2P', cursive;
+    font-family: 'Quantico', sans-serif;
+}
+
+#app, html, body {
+    height: 100%;
+    padding: 0;
+    margin: 0;
+}

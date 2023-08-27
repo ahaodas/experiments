@@ -10,8 +10,9 @@ export default defineConfig({
     plugins: [basicSsl()],
     resolve: {
         alias: {
-            '@game-view': path.resolve(__dirname, './src/GameView'),
-            '@remote-controller': path.resolve(__dirname, './src/RemoteController'),
+            '@mobile-app': path.resolve(__dirname, './src/MobileApp'),
+            '@desktop-app': path.resolve(__dirname, './src/DesktopApp'),
+            'components': path.resolve(__dirname, './src/components'),
             utils: path.resolve(__dirname, './src/utils'),
         },
     },

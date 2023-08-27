@@ -88,7 +88,8 @@ export class ConnectionService {
                 }
             })
         })
-        callBack && callBack(roomRef.id)
+        return roomRef.id
+        //callBack && callBack(roomRef.id)
     }
     async joinRoom(roomId: string) {
         this.roomId = roomId

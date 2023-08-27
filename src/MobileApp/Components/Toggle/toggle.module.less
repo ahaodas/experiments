@@ -1,0 +1,27 @@
+:local {
+    .input {
+        display: none;
+    }
+
+    .input:checked ~ .label {
+        border-color: cyan;
+        box-shadow: 0 0 5px cyan;
+        .inner {
+            margin-left: 50%;
+            background-color: cyan;
+        }
+    }
+    .label {
+        display: block;
+        height: 40px;
+        width: 120px;
+        border: 1px solid magenta;
+        box-shadow: 0 0 5px magenta;
+        .inner {
+            width: 50%;
+            height: 100%;
+            background: magenta;
+            transition: margin 0.2s ease;
+        }
+    }
+}
