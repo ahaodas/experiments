@@ -1,25 +1,22 @@
-import firebase from 'utils/firebaseInit'
-import config from 'utils/webRTCconfig'
-import { createHandler } from 'utils/common'
-import { rcOndatachannel, roomJoiner } from '@remote-controller/RemoteController'
-import { gameViewOnDataChannel, roomCreator } from '@game-view/GameView'
+import firebase from 'utils/FireBase/firebaseInit'
+import { ConnectionService } from 'utils/connection/ConnectionService'
 
 const initPage = async () => {
-    const peerConnection = new RTCPeerConnection(config)
-    const dataChannel = peerConnection.createDataChannel('dc')
     const db = firebase.firestore()
-    const joinRoom = createHandler<string>({ peerConnection, db }, roomJoiner)
-    const createRoom = createHandler({ peerConnection, db }, roomCreator)
+    const service = new ConnectionService(db)
     const roomId = new URLSearchParams(location.search).get('roomId')
     try {
         if (roomId) {
-            await joinRoom(roomId)
-            peerConnection.ondatachannel = rcOndatachannel
+            const mobileView = await import('@remote-controller/RemoteController')
+            await service.joinRoom(roomId)
+            service.setDataChannelSubscriptions(mobileView.getRemoteControlHandlers)
         } else {
-            await createRoom()
-            peerConnection.ondatachannel = gameViewOnDataChannel(dataChannel)
+            const desktopView = await import('@game-view/GameView')
+            await service.createRoom(desktopView.placeQR)
+            service.setDataChannelSubscriptions(desktopView.getGameViewHandlers(service.dataChannel))
         }
     } catch (e) {
+        //tmp error handling
         const div = document.createElement('div')
         div.style.fontStyle = 'italic'
         div.style.color = 'tomato'
@@ -32,11 +29,9 @@ const initPage = async () => {
 window.onload = () => initPage().catch(console.log)
 
 document.body.onclick = async () => {
-  try {
-    await document.documentElement.requestFullscreen({ navigationUI: 'hide' })
-  } catch (e) {
-    console.log(e)
-  }
+    try {
+        await document.documentElement.requestFullscreen({ navigationUI: 'hide' })
+    } catch (e) {
+        console.log(e)
+    }
 }
-
-

@@ -13,3 +13,5 @@ interface ImportMetaEnv {
 interface ImportMeta {
     readonly env: ImportMetaEnv
 }
+
+type DataChannelHandlers = Partial<Pick<RTCDataChannel, 'onerror' | 'onopen' | 'onclose' | 'onmessage'>>
