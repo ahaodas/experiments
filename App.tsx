@@ -1,6 +1,6 @@
 import React from 'react'
 import { Outlet, RouterProvider } from 'react-router'
-import { createBrowserRouter, createHashRouter, Link} from 'react-router-dom'
+import { createHashRouter, Link} from 'react-router-dom'
 import firebase from 'utils/FireBase/firebaseInit'
 import { ConnectionService } from 'utils/connection/ConnectionService'
 import { createRoot } from 'react-dom/client'
@@ -10,11 +10,9 @@ import OuterLayout from 'components/OuterLayout'
 import InnerLayout from "components/InnerLayout";
 import ConnectionContext from 'utils/connection/ConnectionContext'
 
-
-const createRouter = import.meta.env.MODE === 'development' ? createBrowserRouter : createHashRouter
-export const router = createRouter([
+export const router = createHashRouter([
     {
-        path: '/experiments',
+        path: '/',
         element: (
             <OuterLayout>
                 <Outlet />
@@ -22,7 +20,7 @@ export const router = createRouter([
         ),
         children: [
             {
-                path: '/experiments/',
+                path: '/',
                 element: (
                     <InnerLayout>
                         <Link style={{ fontSize: '5rem', color: 'white' }} to={'race'}>

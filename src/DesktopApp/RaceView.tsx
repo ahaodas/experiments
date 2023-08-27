@@ -69,6 +69,7 @@ const RaceView = () => {
     useEffect(() => {
         connectionService.createRoom().then(raceId => {
             setRaceId(raceId)
+            console.log('for debug:', `${location.href}/${raceId}`)
             connectionService.setDataChannelSubscriptions(() => ({
                 onopen: () => {
                     setConnected(true)

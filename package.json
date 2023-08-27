@@ -1,6 +1,7 @@
 {
   "name": "webrtc-demo",
   "version": "0.0.0",
+  "homepage": "https://ahaodas.github.io/experiments",
   "scripts": {
     "dev": "vite --host",
     "build": "vite build",
