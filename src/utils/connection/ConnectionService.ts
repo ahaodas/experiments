@@ -1,5 +1,5 @@
 import firebase from 'firebase/compat'
-import { doc, deleteDoc } from 'firebase/firestore'
+import { doc, deleteDoc, getDocs } from 'firebase/firestore'
 import Firestore = firebase.firestore.Firestore
 import config from 'utils/webRTCconfig'
 
@@ -8,6 +8,8 @@ export class ConnectionService {
     store: Firestore
     dataCh: RTCDataChannel
     roomId?: string
+    connections: Map<string, RTCPeerConnection> = new Map()
+
     constructor(store) {
         this.store = store
         this.peerConnection = new RTCPeerConnection(config)
@@ -35,7 +37,6 @@ export class ConnectionService {
                 this.log('CLOSE', e)
                 // @ts-ignore
                 handlers.onclose(e)
-                await this.clearStore()
             }
             e.channel.onmessage = e => {
                 this.log('MESSAGE', e)
@@ -50,15 +51,58 @@ export class ConnectionService {
             console.log(`%c ${title}`, 'color: magenta', ...args)
         }
     }
-    async clearStore() {
-        if (this.roomId) await deleteDoc(doc(this.store, 'rooms', this.roomId))
+
+    async removeRoom(roomId: string) {
+        await deleteDoc(doc(this.store, 'rooms', roomId))
     }
-    private async getRoomRef() {
-        return this.store.collection('rooms').doc(this.roomId)
+
+    async getAllRooms() {
+        const res = []
+        const docs = await getDocs(this.store.collection('rooms'))
+        docs.forEach(item => res.push(item.id))
+        return res
     }
-    async createRoom(callBack?: (roomId: string) => void) {
+
+    private async getRoomRef(roomId?: string) {
+        return this.store.collection('rooms').doc(roomId)
+    }
+
+    async registerNewConnection() {
+        const connection = new RTCPeerConnection(config)
+        const offer = await connection.createOffer()
+        await connection.setLocalDescription(offer)
+        const roomWithOffer = {
+            offer: {
+                type: offer.type,
+                sdp: offer.sdp,
+            },
+        }
+        const rooms = this.store.collection('rooms')
+        const room = await rooms.add(roomWithOffer)
+        this.connections.set(room.id, connection)
+        const callerCandidatesCollection = room.collection('callerCandidates')
+        connection.addEventListener(
+            'icecandidate',
+            event => event.candidate && callerCandidatesCollection.add(event.candidate.toJSON())
+        )
+        room.onSnapshot(async snapshot => {
+            const data = snapshot.data()
+            if (!connection.currentRemoteDescription && data && data.answer)
+                await connection.setRemoteDescription(new RTCSessionDescription(data.answer))
+        })
+        room.collection('calleeCandidates').onSnapshot(snapshot => {
+            snapshot.docChanges().forEach(async storedCandidate => {
+                if (storedCandidate.type === 'added')
+                    await connection.addIceCandidate(new RTCIceCandidate(storedCandidate.doc.data()))
+            })
+        })
+        return room.id
+    }
+
+    async createRoom() {
         const roomRef = await this.getRoomRef()
         const callerCandidatesCollection = roomRef.collection('callerCandidates')
+
         this.peerConnection.addEventListener(
             'icecandidate',
             event => event.candidate && callerCandidatesCollection.add(event.candidate.toJSON())
@@ -91,6 +135,7 @@ export class ConnectionService {
         return roomRef.id
         //callBack && callBack(roomRef.id)
     }
+
     async joinRoom(roomId: string) {
         this.roomId = roomId
         const roomRef = await this.getRoomRef()
