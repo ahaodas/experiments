@@ -1,67 +1,36 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import './desktopStyles.css'
-import { init } from './desktopScript'
 import QRCode from 'react-qr-code'
 import Index from 'components/OuterLayout'
 import InnerLayout from 'components/InnerLayout'
 import ConnectionContext from 'utils/connection/ConnectionContext'
 import { Link } from 'react-router-dom'
+import GameEngine, { GameDataMessage } from './GameEngine/Classes/GameEngine'
+import ViewPort from '@desktop-app/GameEngine/Camera/ViewPort'
+import Ship from '@desktop-app/GameEngine/Shapes/Ship'
+import SceneWrapper from '@desktop-app/GameEngine/Camera/Scene'
+import Scene from '@desktop-app/GameEngine/Classes/Scene'
+
+const scene = new Scene()
+const game = new GameEngine(scene)
 
 const Markup = () => {
-    const connectionService = useContext(ConnectionContext)
+    const { dataChannel } = useContext(ConnectionContext)
+    const [state, setState] = useState(game)
     useEffect(() => {
-        init(connectionService.dataChannel)
+        dataChannel.onmessage = message => {
+            // const newState = game.onMessage(JSON.parse(message.data))
+            //   setState({ ...newState })
+            console.log('dataChannel.onmessage', message.data)
+        }
     }, [])
-    return (
-        <div className="root scene" id="scene">
-            <div className="reflectionContainer" id="mirror"></div>
-            <div className="scene scene_sub grid" id="subscene">
-                <div className="x-axis axis baseV2" id="spinbase"></div>
-                <div className="ufo">
-                    <div className="s sbc">back 🔜</div>
-                    <div className="s sf">front 🔜</div>
-                    <div className="s sl">left 🔜</div>
-                    <div className="s sr">right 🔜</div>
-                    <div className="s st">top 🔜</div>
-                    <div className="s sb">bottom 🔜</div>
-                </div>
-                <div className="ufo ufo2">
-                    <div className="s sbc">back 🔜</div>
-                    <div className="s sf">front 🔜</div>
-                    <div className="s sl">left 🔜</div>
-                    <div className="s sr">right 🔜</div>
-                    <div className="s st">top 🔜</div>
-                    <div className="s sb">bottom 🔜</div>
-                </div>
-            </div>
-            <div className="mc" id="ship">
-                <div className="c cl">
-                    <div className="s sbc"></div>
-                    <div className="s sf"></div>
-                    <div className="s sl"></div>
-                    <div className="s sr"></div>
-                    <div className="s st"></div>
-                    <div className="s sb"></div>
-                </div>
-                <div className="c cr">
-                    <div className="s sbc"></div>
-                    <div className="s sf"></div>
-                    <div className="s sl"></div>
-                    <div className="s sr"></div>
-                    <div className="s st"></div>
-                    <div className="s sb"></div>
-                </div>
-                <div className="c cm oppo">
-                    <div className="s sbc"></div>
-                    <div className="s sf"></div>
-                    <div className="s sl"></div>
-                    <div className="s sr"></div>
-                    <div className="s st"></div>
-                    <div className="s sb"></div>
-                </div>
-            </div>
-        </div>
-    )
+
+    return state.scene ? (
+        <ViewPort>
+            <SceneWrapper scene={state.scene} />
+            <Ship />
+        </ViewPort>
+    ) : null
 }
 
 const RaceView = () => {
@@ -85,7 +54,7 @@ const RaceView = () => {
                 },
             }))
         })
-        return connectionService.clearStore
+        //    return connectionService.clearStore()
     }, [])
 
     return (

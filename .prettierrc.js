@@ -5,4 +5,5 @@ module.exports = {
     printWidth: 128,
     tabWidth: 4,
     arrowParens: 'avoid',
+    overrides: [{"files": ["*.frag"], "options": {"parser": "glsl-parser"}}]
 }

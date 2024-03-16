@@ -1,0 +1,318 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 15536,
+      "max": [
+        9.458617210388184,
+        11.140576362609863,
+        3.675901174545288
+      ],
+      "min": [
+        -1.82078218460083,
+        -11.140576362609863,
+        -1.8661868572235107
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 186432,
+      "componentType": 5126,
+      "count": 15536,
+      "max": [
+        1.0,
+        1.0,
+        0.9996169209480286
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 15536,
+      "max": [
+        1.0000001192092896,
+        1.0
+      ],
+      "min": [
+        0.0,
+        0.0
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 25032,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 372864,
+      "componentType": 5126,
+      "count": 3188,
+      "max": [
+        9.070610046386719,
+        11.140576362609863,
+        3.675901174545288
+      ],
+      "min": [
+        -2.720766067504883,
+        -11.140576362609863,
+        -1.8661868572235107
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 411120,
+      "componentType": 5126,
+      "count": 3188,
+      "max": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -0.9986295104026794,
+        -1.0,
+        -1.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 124288,
+      "componentType": 5126,
+      "count": 3188,
+      "max": [
+        1.0000001192092896,
+        1.0
+      ],
+      "min": [
+        0.0,
+        0.01000000536441803
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 100128,
+      "componentType": 5125,
+      "count": 5364,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "f3nix (https://sketchfab.com/f3nix)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/one-man-light-jet-tron-054e06c1342540d99cd6752e6d65634e",
+      "title": "One man light jet tron"
+    },
+    "generator": "Sketchfab-12.67.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 121584,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 149792,
+      "byteOffset": 121584,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 449376,
+      "byteOffset": 271376,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 720752,
+      "uri": "scene.bin"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "black",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.00051546,
+          0.00051546,
+          0.00051546,
+          1.0
+        ],
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.9998847396
+      }
+    },
+    {
+      "doubleSided": true,
+      "emissiveFactor": [
+        0.7719716418980554,
+        0.19251181620789506,
+        0.0004902107847549156
+      ],
+      "name": "tron",
+      "pbrMetallicRoughness": {
+        "baseColorFactor": [
+          0.9602083827,
+          0.2385579779,
+          0.0006728273,
+          1.0
+        ],
+        "metallicFactor": 0.0,
+        "roughnessFactor": 0.780910977
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "Cylinder.004_black_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TEXCOORD_0": 2
+          },
+          "indices": 3,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "Cylinder.004_tron_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 5,
+            "POSITION": 4,
+            "TEXCOORD_0": 6
+          },
+          "indices": 7,
+          "material": 1,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        2.220446049250313e-16,
+        -1.0,
+        0.0,
+        0.0,
+        1.0,
+        2.220446049250313e-16,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0,
+        0.0,
+        -1.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "f64c5a61c7634066a08b74e608cbcc19.fbx"
+    },
+    {
+      "children": [
+        3
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4,
+        5
+      ],
+      "matrix": [
+        100.0,
+        0.0,
+        0.0,
+        0.0,
+        -0.0,
+        -1.629206793918314e-05,
+        -99.99999999999868,
+        0.0,
+        0.0,
+        99.99999999999868,
+        -1.629206793918314e-05,
+        0.0,
+        -320.5003356933594,
+        41.26359558105469,
+        1.415069818496704,
+        1.0
+      ],
+      "name": "Cylinder.004"
+    },
+    {
+      "mesh": 0,
+      "name": "Cylinder.004_black_0"
+    },
+    {
+      "mesh": 1,
+      "name": "Cylinder.004_tron_0"
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ]
+}

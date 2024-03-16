@@ -7,7 +7,6 @@
     background: black;
 }
 .scene {
-    visibility: hidden;
     position: absolute;
     bottom: 0;
     transform-style: preserve-3d;
@@ -84,7 +83,6 @@
     align-self: center;
 }
 .c {
-
     transform-style: preserve-3d;
     position: absolute;
     transform-origin: 0 50% -50px;
@@ -194,6 +192,7 @@
 .cr .sb:after {
     transform: rotateZ(-191deg);
 }
+
 .cm {
     left: 100px;
     width: 400px;

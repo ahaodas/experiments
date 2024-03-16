@@ -1,0 +1,66 @@
+:local {
+    .root {
+        position: absolute;
+        transform-style: preserve-3d;
+        outline-color: var(--color);
+        box-shadow: 0 0 20px var(--color);
+        color: var(--color);
+        transform: translateZ(var(--z)) translateX(var(--x)) translateY(var(--y));
+        will-change: transform;
+
+        &:hover {
+            & > * {
+                outline: 1px solid var(--alt-color);
+                box-shadow: 0 0 20px var(--alt-color);
+                color: var(--alt-color);
+            }
+        }
+    }
+
+    .side {
+        user-select: none;
+        overflow: hidden;
+        position: absolute;
+        outline: 1px solid;
+        box-shadow: inherit;
+        outline-color: inherit;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+
+    .front,
+    .back,
+    .left,
+    .right {
+        height: 100%;
+    }
+
+    .front,
+    .back,
+    .top,
+    .bottom,
+    .left,
+    .right {
+        width: 100%;
+    }
+    .left {
+        transform-origin: 0 50%;
+        transform: rotateY(90deg);
+    }
+    .right {
+        right: 0;
+        transform-origin: 100% 50%;
+        transform: rotateY(-90deg);
+    }
+    .top {
+        transform-origin: 0 0;
+        transform: rotateX(-90deg);
+    }
+    .bottom {
+        bottom: 0;
+        transform-origin: 0 100%;
+        transform: rotateX(90deg);
+    }
+}

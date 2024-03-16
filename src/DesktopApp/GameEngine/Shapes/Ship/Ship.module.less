@@ -1,0 +1,199 @@
+@height: 20px;
+@width: 600px;
+:local {
+  .root {
+    position: absolute;
+    top: calc(50% + @height/2);
+    left: calc(50% - @width / 2);
+  //  transform: rotate3d(1, 0, 0, 45deg) translateZ(-300px);
+    transform-style: preserve-3d;
+   // transform-origin: 50% 50% -300px;
+    transform-origin: center center 0;
+    width: @width;
+    transition: transform .2s ease;
+    align-self: center;
+  }
+
+  .part {
+    transform-style: preserve-3d;
+    position: absolute;
+    transform-origin: 0 50% -50px;
+    height: @height;
+    width: 100px;
+  //  transition: .3s ease;
+  }
+
+
+  .rightWing .side,
+  .leftWing .side{
+    overflow: hidden;
+    position: absolute;
+    outline: 1px solid cyan;
+    box-shadow: 0 0 20px cyan;
+  }
+
+  .rightWing .sf,
+  .leftWing .sf,
+  .rightWing .sbc,
+  .leftWing .sbc,
+  .rightWing .sl,
+  .leftWing .sl,
+  .rightWing .sr,
+  .leftWing .sr {
+    height: 100%;
+  }
+
+  .rightWing .sf,
+  .leftWing .sf,
+  .rightWing .sbc,
+  .leftWing .sbc,
+  .rightWing .st,
+  .leftWing .st,
+  .rightWing .sb,
+  .leftWing .sb {
+    width: 100%;
+  }
+
+  .rightWing .sl,
+  .leftWing .sl,
+  .rightWing .sr,
+  .leftWing .sr {
+    width: 600px;
+  }
+
+  .rightWing .st,
+  .leftWing .st,
+  .rightWing .sb,
+  .leftWing .sb {
+    height: 600px;
+  }
+
+  .rightWing .sl,
+  .leftWing .sl {
+    transform-origin: 0 50%;
+    transform: rotateY(90deg);
+  }
+
+  .rightWing .sr,
+  .leftWing .sr {
+    right: 0;
+    transform-origin: 100% 50%;
+    transform: rotateY(-90deg);
+  }
+
+  .rightWing .st,
+  .leftWing .st {
+    transform-origin: 0 0;
+    transform: rotateX(-90deg);
+  }
+
+  .rightWing .sb,
+  .leftWing .sb {
+    bottom: 0;
+    transform-origin: 0 100%;
+    transform: rotateX(90deg);
+  }
+
+  .rightWing .sbc,
+  .leftWing .sbc {
+    transform: translateZ(-600px);
+  }
+
+  .rightWing .st,
+  .leftWing .st,
+  .rightWing .sb,
+  .leftWing .sb {
+    perspective: 0;
+  }
+
+  .rightWing .st:after,
+  .leftWing .st:after,
+  .rightWing .sb:after,
+  .leftWing .sb:after {
+    content: '';
+    height: 100%;
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: 0;
+    outline: 100px solid cyan;
+  }
+
+  .rightWing .sf,
+  .leftWing .sf {
+    background: cyan !important;
+  }
+
+  .leftWing .st:after {
+    transform: rotateZ(-191deg);
+  }
+
+  .leftWing .sb:after {
+    transform: rotateZ(191deg);
+  }
+
+  .rightWing {
+    left: 500px;
+  }
+
+  .rightWing .st:after {
+    transform: rotateZ(191deg);
+  }
+
+  .rightWing .sb:after {
+    transform: rotateZ(-191deg);
+  }
+
+  .body {
+    left: 100px;
+    width: 400px;
+    height: 40px;
+  }
+  .body .side{
+    overflow: hidden;
+    position: absolute;
+    outline: 1px solid cyan;
+    box-shadow: 0 0 20px cyan;
+  }
+  .body .sf,
+  .body .sbc,
+  .body .sl,
+  .body .sr {
+    height: 100%;
+  }
+  .body .sf,
+  .body .sbc,
+  .body .st,
+  .body .sb {
+    width: 100%;
+  }
+  .body .sl,
+  .body .sr {
+    width: 150px;
+  }
+  .body .st,
+  .body .sb {
+    height: 150px;
+  }
+  .body .sl {
+    transform-origin: 0 50%;
+    transform: rotateY(90deg);
+  }
+  .body .sr {
+    right: 0;
+    transform-origin: 100% 50%;
+    transform: rotateY(-90deg);
+  }
+  .body .st {
+    transform-origin: 0 0;
+    transform: rotateX(-90deg);
+  }
+  .body .sb {
+    bottom: 0;
+    transform-origin: 0 100%;
+    transform: rotateX(90deg);
+  }
+  .body .sbc {
+    transform: translateZ(-150px);
+  }
+}

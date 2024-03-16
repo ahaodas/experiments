@@ -7,11 +7,15 @@ interface ImportMetaEnv {
     readonly VITE_FIREBASE_API_KEY: string
     readonly VITE_FIREBASE_MESSAGING_SENDER_ID: string
     readonly VITE_FIREBASE_APP_ID: string
-    // more env variables...
 }
 
 interface ImportMeta {
     readonly env: ImportMetaEnv
 }
 
-type DataChannelHandlers = Partial<Pick<RTCDataChannel, 'onerror' | 'onopen' | 'onclose' | 'onmessage'>>
+interface DataChannelHandlers {
+    onerror?: (e: Event) => void
+    onopen?: (e: Event) => void
+    onclose?: (e: Event) => void
+    onmessage?: (e: Event) => void
+}

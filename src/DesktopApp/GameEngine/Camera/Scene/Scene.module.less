@@ -1,0 +1,15 @@
+:local {
+  .root {
+    position: absolute;
+    bottom: 0;
+    transform-style: preserve-3d;
+    height: 100vh;
+    width: 100vw;
+    margin: auto;
+    transition: transform .2s ease;
+  //  outline: 1px solid magenta;
+  //  background-image: linear-gradient(to right, magenta 1px, transparent 1px), linear-gradient(to bottom, magenta 1px, transparent 1px);
+    transform-origin: center center 0;
+    transform: rotateZ(var(--x)) rotateX(var(--y)) rotateY(var(--z));
+  }
+}
