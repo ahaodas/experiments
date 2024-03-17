@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { StoredConnection, useConnectionsStore } from 'utils/connection/connection.store'
-import { getAlternateConnectionName } from 'utils/connection/utils/setSubscriptionsOnRegister'
 import { useParams } from 'react-router'
-import ChatWindow from './ChatWindow'
-import { ChannelView } from './TestWebRtc'
+import { ChannelView, DisableRoomButton, EnableRoomButton } from './TestWebRtc'
 
 const ParentRoomItem: React.FC<{ roomId: string }> = ({ roomId }) => {
     const connection = useConnectionsStore(({ connections }) => connections[roomId])
@@ -36,6 +34,7 @@ const RoomItem: React.FC<{ connection?: StoredConnection; onClick?: () => void; 
                     >
                         {roomId}
                     </div>{' '}
+                    {connection.unsubscribe ? <DisableRoomButton roomId={roomId} /> : <EnableRoomButton roomId={roomId} />}
                     <ChannelView connection={connection} roomId={roomId} />
                 </div>
             </div>

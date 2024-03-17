@@ -8,7 +8,7 @@ const Chat: React.FC<{ user: string; messages: Array<{ text: string; user: strin
                 overflow: 'auto',
                 outline: '1px dashed white',
                 display: 'flex',
-                flexDirection: 'column-reverse',
+                flexDirection: 'column',
             }}
         >
             {messages.map((message, i) => {

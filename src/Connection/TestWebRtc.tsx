@@ -3,6 +3,7 @@ import { StoredConnection, useConnectionsStore } from 'utils/connection/connecti
 import { Link } from 'react-router-dom'
 import Chat from './ChatWindow'
 import ChatWindow from './ChatWindow'
+import { MessageType, useSessionDataStore } from 'utils/session/session.store'
 
 const CreateRoomButton: React.FC = () => {
     const [loading, setLoading] = useState(false)
@@ -44,7 +45,7 @@ const DeleteRoomButton: React.FC<{ roomId: string }> = ({ roomId }) => {
     )
 }
 
-const EnableRoomButton: React.FC<{ roomId: string }> = ({ roomId }) => {
+export const EnableRoomButton: React.FC<{ roomId: string }> = ({ roomId }) => {
     const [loading, setLoading] = useState(false)
     const initConnectionForRoom = useConnectionsStore(({ initConnectionForRoom }) => initConnectionForRoom)
 
@@ -63,7 +64,7 @@ const EnableRoomButton: React.FC<{ roomId: string }> = ({ roomId }) => {
     )
 }
 
-const DisableRoomButton: React.FC<{ roomId: string }> = ({ roomId }) => {
+export const DisableRoomButton: React.FC<{ roomId: string }> = ({ roomId }) => {
     const [loading, setLoading] = useState(false)
     const disableConnection = useConnectionsStore(({ disableConnection }) => disableConnection)
 
@@ -112,30 +113,27 @@ const StatsBlock: React.FC<{ connection: RTCPeerConnection }> = ({ connection })
 export const ChannelView: React.FC<{ connection: StoredConnection; roomId?: string }> = ({ connection, roomId }) => {
     const setDataChannelSubscriptions = useConnectionsStore(({ setDataChannelSubscriptions }) => setDataChannelSubscriptions)
     const disableConnection = useConnectionsStore(({ disableConnection }) => disableConnection)
-    const [messages, setMessages] = useState([])
     const [error, setError] = useState()
     const [channel, setChannel] = useState<RTCDataChannel>()
-
     const [needReconnect, setNeedReconnect] = useState(false)
-
-    const [userName, setUserName] = useState('User' + Math.random().toString().slice(3, 10))
-
     const [inpVal, setInpVal] = useState('')
-
+    const { currentSession, processMessage, createSession, pushSessionMessage } = useSessionDataStore()
     useEffect(() => {
-        connection.connection?.addEventListener('datachannel', () => console.log('NEW DATA CH'))
-    }, [connection.connection])
-
-    useEffect(() => {
+        if (connection.dataChannel)
+            connection.dataChannel.onmessage = ({ data }) => {
+                const message = JSON.parse(data)
+                processMessage(message)
+            }
         if (Boolean(connection.unsubscribe)) {
-            connection.dataChannel.onmessage = ({ data }) =>
-                setMessages(x => {
-                    return [JSON.parse(data), ...x]
-                })
             setDataChannelSubscriptions(connection.connection, channel => {
                 return {
                     onopen: () => {
                         setChannel(channel)
+                        if (currentSession) {
+                            channel.send(JSON.stringify({ type: MessageType.session, data: currentSession }))
+                        } else {
+                            createSession({ user: 'User' + Math.random().toString().slice(3, 10) })
+                        }
                     },
                     onclose: () => {
                         setChannel(undefined)
@@ -149,21 +147,26 @@ export const ChannelView: React.FC<{ connection: StoredConnection; roomId?: stri
     }, [Boolean(connection.unsubscribe)])
 
     const sendData = async () => {
-        await channel.send(JSON.stringify({ user: userName, text: inpVal }))
-        setMessages(x => {
-            return [{ user: userName, text: inpVal }, ...x]
-        })
+        await channel.send(
+            JSON.stringify({
+                type: MessageType.text,
+                data: { user: currentSession?.meta.user, text: inpVal },
+            })
+        )
+        pushSessionMessage({ user: currentSession?.meta.user, text: inpVal })
         setInpVal('')
     }
 
     return (
         <div>
             {needReconnect && <button onClick={() => window.location.reload()}>Reconnect</button>}
-            <input style={{ color: 'black' }} value={userName} onChange={e => setUserName(e.target.value)} type="text" />
+            <h4>{currentSession?.meta.user}</h4>
             <div style={{ display: 'flex' }}>
                 <div>
                     {error && <b style={{ color: 'tomato' }}>error :(</b>}
-                    <ChatWindow user={userName} messages={messages} />
+                    {currentSession && (
+                        <ChatWindow user={currentSession.meta.user} messages={currentSession?.sessionMessages} />
+                    )}
                     <div style={{ display: 'flex' }}>
                         <span>{Boolean(channel) ? '🟢' : '⚫️'}</span>
                         <label>
@@ -184,22 +187,12 @@ export const ChannelView: React.FC<{ connection: StoredConnection; roomId?: stri
 
 const ParentRoomItem: React.FC<{ roomId: string }> = ({ roomId }) => {
     const connection = useConnectionsStore(({ connections }) => connections[roomId])
-    const connectToRoom = useConnectionsStore(({ connectToRoom }) => connectToRoom)
     const disableRoom = useConnectionsStore(({ disableConnection }) => disableConnection)
     useEffect(() => () => disableRoom(roomId), [])
-    const connect = async () => {
-        if (connection.unsubscribe) {
-            await connectToRoom(roomId)
-        }
-    }
-    return <RoomItem connection={connection} onClick={connect} roomId={roomId} />
+    return <RoomItem connection={connection} roomId={roomId} />
 }
 
-const RoomItem: React.FC<{ connection?: StoredConnection; onClick?: () => void; roomId?: string }> = ({
-    roomId,
-    onClick,
-    connection,
-}) => {
+const RoomItem: React.FC<{ connection?: StoredConnection; roomId?: string }> = ({ roomId, connection }) => {
     return (
         <div>
             <div style={{ display: 'flex', gap: 50 }}>

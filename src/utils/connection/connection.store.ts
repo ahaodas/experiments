@@ -71,6 +71,7 @@ export const useConnectionsStore = create<ConnectionStore>((set, get) => ({
         const connection = get().connections[roomId]
         if (!connection) return
         if (connection.unsubscribe) connection.unsubscribe()
+        connection.dataChannel?.close()
         await get().db.collection('rooms').doc(roomId).set({})
         set(
             produce(state => {
