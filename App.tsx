@@ -1,17 +1,16 @@
-import React from 'react'
+import React, { StrictMode } from 'react'
 import { Outlet, RouterProvider } from 'react-router'
 import { createHashRouter, Link } from 'react-router-dom'
 import firebase from 'utils/FireBase/firebaseInit'
-import { ConnectionService } from 'utils/connection/ConnectionService'
 import { createRoot } from 'react-dom/client'
 import RemoteControlView from '@mobile-app/RemoteControlView'
 import RaceView from '@desktop-app/RaceView'
 import OuterLayout from 'components/OuterLayout'
 import InnerLayout from 'components/InnerLayout'
-import ConnectionContext from 'utils/connection/ConnectionContext'
 import Playground from '@desktop-app/GameEngine/Playground'
 import TestWebRtc from './src/Connection/TestWebRtc'
 import TestJoinRoom from './src/Connection/TestJoinRoom'
+import { ConnectionStatus, ExistingRoom, TestCreateRoom } from './src/Connection/TestOneRoom'
 
 const MainMenu = () => {
     const handleClick = async () => {
@@ -32,6 +31,9 @@ const MainMenu = () => {
             <Link style={{ fontSize: '5rem', color: 'white' }} to={'testWebRtc'}>
                 TestWebRtc
             </Link>
+            <Link style={{ fontSize: '5rem', color: 'white' }} to={'testOneRoom'}>
+                testOneRoom
+            </Link>
         </InnerLayout>
     )
 }
@@ -40,6 +42,7 @@ export const router = createHashRouter([
         path: '/',
         element: (
             <OuterLayout>
+                <ConnectionStatus />
                 <Outlet />
             </OuterLayout>
         ),
@@ -68,14 +71,30 @@ export const router = createHashRouter([
                 path: 'joinRoom/:roomId',
                 element: <TestJoinRoom />,
             },
+            {
+                path: 'testOneRoom',
+                element: <TestCreateRoom />,
+            },
+            {
+                path: 'testOneRoom/:roomId',
+                element: <ExistingRoom />,
+            },
+            {
+                path: 'controllerView/:roomId',
+                element: <TestJoinRoom />,
+            },
         ],
     },
 ])
 
 const db = firebase.firestore()
-const connectionService = new ConnectionService(db)
+//const connectionService = new ConnectionService(db)
 const App = () => {
-    return <RouterProvider router={router} />
+    return (
+        <StrictMode>
+            <RouterProvider router={router} />
+        </StrictMode>
+    )
 }
 
 const root = createRoot(document.getElementById('app'))

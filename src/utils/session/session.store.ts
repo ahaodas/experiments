@@ -13,12 +13,8 @@ interface SessionStore {
     clearSession: () => void
     restoreSession: (session: Session) => void
     pushSessionMessage: (messageData: TextMessageData) => void
-    restoreSessionOrCreateSessionLocal: (sessionId?: string) => void
-    storeSessionCurrentToLocalStorage: () => Promise<void>
     processMessage: (message: SessionRestoreMessage | SessionTextMessage) => void
 }
-
-type StoredSessions = Record<string, Session>
 
 export enum MessageType {
     session,
@@ -45,7 +41,6 @@ export interface SessionTextMessage extends SessionMessage {
 }
 
 export const useSessionDataStore = create<SessionStore>((set, get) => ({
-    sessions: {},
     createSession: meta => {
         const sessionId = new Date().getTime().toString()
         set(
@@ -102,30 +97,6 @@ export const useSessionDataStore = create<SessionStore>((set, get) => ({
                 break
             default:
                 console.warn('unsupported type of message', { message })
-        }
-    },
-    storeSessionCurrentToLocalStorage: async () => {
-        try {
-            const session = get().currentSession
-            const sessions = JSON.parse(localStorage.getItem('sessions')) as StoredSessions
-            sessions[session.sessionId] = session
-            await localStorage.setItem('sessions', JSON.stringify(sessions))
-        } catch (e) {
-            console.log('failed to save session: ', e)
-        }
-    },
-    restoreSessionOrCreateSessionLocal: sessionId => {
-        let sessions = {}
-        try {
-            sessions = JSON.parse(localStorage.getItem('sessions')) as StoredSessions
-        } catch (e) {
-            console.log('failed to get stored sessions: ', e)
-        }
-        const session = sessionId ? sessions[sessionId] : Object.values(sessions)[Object.values(sessions).length - 1]
-        if (session) {
-            get().restoreSession(session)
-        } else {
-            get().createSession()
         }
     },
 }))

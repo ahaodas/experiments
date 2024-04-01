@@ -12,7 +12,7 @@ import * as THREE from 'three'
 import { GLTF } from 'three-stdlib'
 import { KernelSize, Resolution } from 'postprocessing'
 
-import { Model as Jet2 } from '@assets/orange-jet2/Jet2'
+import Jet2 from '@assets/orange-jet2'
 
 const SceneObjects = [
     MoveShape.Box({ height: 3, width: 2, length: 1, x: 1, y: 2, z: -1 }),
@@ -48,7 +48,7 @@ type GLTFResult = GLTF & {
     }
 }
 
-const Model: React.FC = () => {
+export const Model: React.FC<JSX.IntrinsicElements['group']> = props => {
     // const model = useLoader(FBXLoader, 'src/assets/jet.fbx')
     // const groupRef = useRef()
     // @ts-ignore
@@ -58,7 +58,7 @@ const Model: React.FC = () => {
     return (
         <Suspense fallback={<Loader />}>
             <group dispose={null}>
-                <group position={[2, 0, -1]} rotation={[0, Math.PI / 2, -Math.PI / 2]} scale={0.008}>
+                <group rotation={[0, Math.PI / 2, -Math.PI / 2]} scale={0.05} {...props}>
                     <mesh geometry={nodes.Torus001_1.geometry} material={materials['tron.001']} />
                     <mesh geometry={nodes.Torus001_2.geometry} material={materials.black} />
                     <mesh
@@ -77,7 +77,6 @@ const Model: React.FC = () => {
 
 const Playground = () => {
     //const [state, setState] = useState(game)
-
     const onMessage = (message: GameDataMessage) => {
         const newState = game.onMessage(message)
         // @ts-ignore
@@ -96,75 +95,79 @@ const Playground = () => {
 
     return (
         <>
-            <div>
-                <div style={{ color: 'white' }}>luminanceThreshold {state.luminanceThreshold}</div>
-                <input
-                    value={state.luminanceThreshold}
-                    type="range"
-                    step={0.01}
-                    min={0}
-                    max={10}
-                    onChange={e => {
-                        setState(x => ({
-                            ...x,
-                            luminanceThreshold: parseFloat(e.target.value),
-                        }))
-                    }}
-                />
-            </div>
-            <div>
-                <div style={{ color: 'white' }}>intensity {state.intensity}</div>
-                <input
-                    value={state.intensity}
-                    type="range"
-                    step={0.1}
-                    min={0}
-                    max={10}
-                    onChange={e => {
-                        setState(x => ({
-                            ...x,
-                            intensity: parseFloat(e.target.value),
-                        }))
-                    }}
-                />
-            </div>
-            <div>
-                <div style={{ color: 'white' }}>luminanceSmoothing {state.luminanceSmoothing}</div>
-                <input
-                    value={state.luminanceSmoothing}
-                    type="range"
-                    step={0.01}
-                    min={0}
-                    max={10}
-                    onChange={e => {
-                        setState(x => ({
-                            ...x,
-                            luminanceSmoothing: parseFloat(e.target.value),
-                        }))
-                    }}
-                />
-            </div>
-            <div>
-                <div style={{ color: 'white' }}>mipmapBlur {state.mipmapBlur}</div>
-                <input
-                    checked={state.mipmapBlur}
-                    type="checkbox"
-                    onChange={e => {
-                        setState(x => ({
-                            ...x,
-                            mipmapBlur: e.target.checked,
-                        }))
-                    }}
-                />
+            <div style={{ position: 'absolute', zIndex: 999 }}>
+                <div>
+                    <div style={{ color: 'white' }}>luminanceThreshold {state.luminanceThreshold}</div>
+                    <input
+                        value={state.luminanceThreshold}
+                        type="range"
+                        step={0.01}
+                        min={0}
+                        max={10}
+                        onChange={e => {
+                            setState(x => ({
+                                ...x,
+                                luminanceThreshold: parseFloat(e.target.value),
+                            }))
+                        }}
+                    />
+                </div>
+                <div>
+                    <div style={{ color: 'white' }}>intensity {state.intensity}</div>
+                    <input
+                        value={state.intensity}
+                        type="range"
+                        step={0.1}
+                        min={0}
+                        max={10}
+                        onChange={e => {
+                            setState(x => ({
+                                ...x,
+                                intensity: parseFloat(e.target.value),
+                            }))
+                        }}
+                    />
+                </div>
+                <div>
+                    <div style={{ color: 'white' }}>luminanceSmoothing {state.luminanceSmoothing}</div>
+                    <input
+                        value={state.luminanceSmoothing}
+                        type="range"
+                        step={0.01}
+                        min={0}
+                        max={10}
+                        onChange={e => {
+                            setState(x => ({
+                                ...x,
+                                luminanceSmoothing: parseFloat(e.target.value),
+                            }))
+                        }}
+                    />
+                </div>
+                <div>
+                    <div style={{ color: 'white' }}>mipmapBlur {state.mipmapBlur}</div>
+                    <input
+                        checked={state.mipmapBlur}
+                        type="checkbox"
+                        onChange={e => {
+                            setState(x => ({
+                                ...x,
+                                mipmapBlur: e.target.checked,
+                            }))
+                        }}
+                    />
+                </div>
             </div>
             <ViewPort>
                 <Stars radius={100} depth={50} count={5000} factor={4} saturation={0} fade speed={1} />
                 <ambientLight />
                 <directionalLight position={[3.3, 1.0, 4.4]} castShadow />
-                <CameraControls />
-
+                {/*<CameraControls />*/}
                 <Jet2 />
-                <Model />
+                <Model position={[15, 10, -12]} />
+                <Model position={[22, -12, 12]} />
+                <Model position={[-20, 15, 31]} />
+                <Model position={[-40, 0, -18]} />
                 {/*<SceneView scene={state.scene} />*/}
                 <EffectComposer>
                     <Bloom

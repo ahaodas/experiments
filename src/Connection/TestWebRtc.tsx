@@ -88,7 +88,6 @@ const StatsBlock: React.FC<{ connection: RTCPeerConnection }> = ({ connection })
     useEffect(() => {
         const interval = setInterval(async () => {
             const stats = await connection.getStats()
-            console.log(stats.entries())
             let res = ''
             stats.forEach(report => {
                 res += Object.entries(report).map(([key, value]) => {
