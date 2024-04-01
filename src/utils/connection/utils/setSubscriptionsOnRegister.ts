@@ -33,7 +33,7 @@ export const setSubscriptionsOnRegister = async (
     }
     connection.addEventListener('icecandidate', onICECandidate)
 
-    const existingRoomData = await room.get()
+    //const existingRoomData = await room.get()
     // const existingOffer = existingRoomData.data().offer
     // //const existingAnswer = existingRoomData.data().answer
     // if (isInitiator) {
@@ -66,7 +66,7 @@ export const setSubscriptionsOnRegister = async (
                 // )
                 const iceCandidate = storedCandidate.doc.data()
                 if (iceCandidateIsValid(iceCandidate) && connection.currentRemoteDescription) {
-                    console.log('iceCandidate:', iceCandidate)
+                    // console.log('iceCandidate:', iceCandidate)
                     connection.addIceCandidate(new RTCIceCandidate(iceCandidate))
                 }
             }
