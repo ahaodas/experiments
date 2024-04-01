@@ -28,7 +28,7 @@ export const setSubscriptionsOnRegister = async (
 ) => {
     const callerCandidatesCollection = room.collection('callerCandidates')
     const onICECandidate = event => {
-        console.log('new icecandidate sent', 'connection.currentRemoteDescription:', connection.currentRemoteDescription)
+        // console.log('new icecandidate sent', 'connection.currentRemoteDescription:', connection.currentRemoteDescription)
         event.candidate && callerCandidatesCollection.add(event.candidate.toJSON())
     }
     connection.addEventListener('icecandidate', onICECandidate)
@@ -49,10 +49,10 @@ export const setSubscriptionsOnRegister = async (
     //     }
     // }
 
-    const existingICECandidates = await callerCandidatesCollection.get()
-    existingICECandidates.forEach(x => {
-        if (connection.currentRemoteDescription) connection.addIceCandidate(new RTCIceCandidate(x.data()))
-    })
+    // const existingICECandidates = await callerCandidatesCollection.get()
+    // existingICECandidates.forEach(x => {
+    //     if (connection.currentRemoteDescription) connection.addIceCandidate(new RTCIceCandidate(x.data()))
+    // })
 
     const unsubscribeCandidates = callerCandidatesCollection.onSnapshot(snapshot => {
         snapshot.docChanges().forEach(storedCandidate => {
@@ -60,7 +60,9 @@ export const setSubscriptionsOnRegister = async (
                 console.log(
                     'new icecandidate received',
                     'connection.currentRemoteDescription:',
-                    connection.currentRemoteDescription
+                    connection.currentRemoteDescription,
+                    'connection.signalingState:',
+                    connection.signalingState
                 )
                 const iceCandidate = storedCandidate.doc.data()
                 if (iceCandidateIsValid(iceCandidate) && connection.currentRemoteDescription) {
@@ -76,13 +78,22 @@ export const setSubscriptionsOnRegister = async (
         unsubscribeRoom = room.onSnapshot(async snapshot => {
             const data = snapshot.data()
             if (!connection.currentRemoteDescription && data && data.answer) {
+                // console.log(
+                //     'new answer received',
+                //     'connection.currentRemoteDescription:',
+                //     connection.currentRemoteDescription,
+                //     'connection.signalingState:',
+                //     connection.signalingState
+                // )
                 await connection.setRemoteDescription(new RTCSessionDescription(data.answer))
             }
         })
     }
 
     return () => {
+        callerCandidatesCollection.doc().set({})
         connection.removeEventListener('icecandidate', onICECandidate)
+        room.set({})
         unsubscribeRoom && unsubscribeRoom()
         unsubscribeCandidates()
     }

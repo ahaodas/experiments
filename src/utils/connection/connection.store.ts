@@ -114,6 +114,7 @@ export const useConnectionsStore = create<ConnectionStore>((set, get) => ({
                 sdp: offer.sdp,
             },
         }
+        await connection.setLocalDescription(offer).catch(e => console.log('setLocalDescription err A', e))
         await room.set(roomWithOffer)
 
         const unSubscribeChanel = get().setDataChannelSubscriptions(connection, channel => ({
