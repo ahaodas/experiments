@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { useFrame } from '@react-three/fiber'
 import { PerspectiveCamera } from '@react-three/drei'
 
@@ -17,19 +17,33 @@ const CameraContainer: React.FC<Props> = ({ children, srX, srY, srZ, moveSpeed }
     const innerGroup = useRef<THREE.Group>()
     const rootRef = useRef<THREE.Group>()
 
+    useEffect(() => {
+        if ((srX || srY || srZ) && groupRef.current) {
+            const currentQuaternion = groupRef.current.quaternion.clone()
+            const xQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), srX)
+            const yQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), srY)
+            const zQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), srZ)
+
+            currentQuaternion.multiply(xQuaternion)
+            currentQuaternion.multiply(yQuaternion)
+            currentQuaternion.multiply(zQuaternion)
+            groupRef.current.quaternion.copy(currentQuaternion)
+        }
+    }, [srX, srY, srZ, Boolean(groupRef.current)])
+
     useFrame(() => {
         if (groupRef.current) {
-            if (srX || srY || srZ) {
-                const currentQuaternion = groupRef.current.quaternion.clone()
-                const xQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), srX)
-                const yQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), srY)
-                const zQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), srZ)
-
-                currentQuaternion.multiply(xQuaternion)
-                currentQuaternion.multiply(yQuaternion)
-                currentQuaternion.multiply(zQuaternion)
-                groupRef.current.quaternion.copy(currentQuaternion)
-            }
+            // if (srX || srY || srZ) {
+            //     const currentQuaternion = groupRef.current.quaternion.clone()
+            //     const xQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(1, 0, 0), srX)
+            //     const yQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 1, 0), srY)
+            //     const zQuaternion = new THREE.Quaternion().setFromAxisAngle(new THREE.Vector3(0, 0, 1), srZ)
+            //
+            //     currentQuaternion.multiply(xQuaternion)
+            //     currentQuaternion.multiply(yQuaternion)
+            //     currentQuaternion.multiply(zQuaternion)
+            //     groupRef.current.quaternion.copy(currentQuaternion)
+            // }
             if (moveSpeed) {
                 const moveVector = new THREE.Vector3(0, 0, -moveSpeed)
                 moveVector.applyQuaternion(groupRef.current.quaternion)

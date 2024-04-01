@@ -5,6 +5,7 @@ import QRCode from 'react-qr-code'
 import { Link } from 'react-router-dom'
 import { useDataChannelStore } from 'utils/connection/dataChannel.store'
 import { MessageType, useSessionDataStore } from 'utils/session/session.store'
+import { RaceViewPort } from '../RaceViewPort/RaceViewPort'
 
 export const ConnectionStatus = () => {
     const { roomId } = useParams()
@@ -33,11 +34,12 @@ export const WaitingView = () => {
     }, [roomId, Boolean(outChannel) && Boolean(inputChannel), connections])
 
     if (outChannel?.readyState === 'open' && inputChannel?.readyState === 'open') {
-        return <Receiver />
+        return <RaceViewPort />
     }
+
     return (
-        <Link target="_blank" to={`/joinRoom/${roomId}`}>
-            <QRCode fgColor="cyan" bgColor="transparent" value={`${location.href}/joinRoom/${roomId}`} />
+        <Link target="_blank" to={`/helm/${roomId}`}>
+            <QRCode fgColor="cyan" bgColor="transparent" value={`${location.origin}${location.pathname}#/helm/${roomId}`} />
         </Link>
     )
 }
@@ -58,15 +60,21 @@ export const TestCreateRoom = () => {
     const { addRoom } = useConnectionsStore()
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false)
-    useEffect(() => {
-        if (!loading)
-            addRoom(true, true).then(connection => {
-                setLoading(false)
-                navigate(`${connection.roomId}`)
-            })
-    }, [loading])
 
-    return <>Creating room...</>
+    const createRoom = () => {
+        setLoading(true)
+        addRoom(true, true).then(connection => {
+            console.log('connection.roomId', connection.roomId)
+            setLoading(false)
+            navigate(`${connection.roomId}`)
+        })
+    }
+
+    return (
+        <button disabled={loading} onClick={createRoom}>
+            Create room
+        </button>
+    )
 }
 
 const Receiver: React.FC = () => {

@@ -57,13 +57,13 @@ export const setSubscriptionsOnRegister = async (
     const unsubscribeCandidates = callerCandidatesCollection.onSnapshot(snapshot => {
         snapshot.docChanges().forEach(storedCandidate => {
             if (storedCandidate.type === 'added') {
-                console.log(
-                    'new icecandidate received',
-                    'connection.currentRemoteDescription:',
-                    connection.currentRemoteDescription,
-                    'connection.signalingState:',
-                    connection.signalingState
-                )
+                // console.log(
+                //     'new icecandidate received',
+                //     'connection.currentRemoteDescription:',
+                //     connection.currentRemoteDescription,
+                //     'connection.signalingState:',
+                //     connection.signalingState
+                // )
                 const iceCandidate = storedCandidate.doc.data()
                 if (iceCandidateIsValid(iceCandidate) && connection.currentRemoteDescription) {
                     console.log('iceCandidate:', iceCandidate)

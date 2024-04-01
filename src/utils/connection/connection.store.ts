@@ -49,7 +49,7 @@ interface ConnectionStore {
 }
 
 const getDB = () => {
-    console.log('getDB')
+    //console.log('getDB')
     return firebase.firestore()
 }
 
@@ -167,18 +167,12 @@ export const useConnectionsStore = create<ConnectionStore>((set, get) => ({
             }
             e.channel.onclose = async e => {
                 get().log(`${roomId} CLOSE`, e)
-                // set(
-                //     produce(state => {
-                //         state.connections[roomId].responseDataChannel = undefined
-                //     })
-                // )
                 handlers.onclose && handlers.onclose(e)
             }
         }
         connection.addEventListener('datachannel', onDataChannel)
 
         return () => connection.removeEventListener('datachannel', onDataChannel)
-        //todo разрулить с отписками
     },
 
     connectToRoom: async roomId => {
@@ -193,12 +187,34 @@ export const useConnectionsStore = create<ConnectionStore>((set, get) => ({
                 })
             )
         const dataChannel = connection.createDataChannel('DataChannel')
-        const unsubscribe = await setSubscriptionsOnRegister(connection, room)
+        const unsubscribeSignal = await setSubscriptionsOnRegister(connection, room)
+
+        const unsubscribeChannels = get().setDataChannelSubscriptions(connection, channel => ({
+            onopen: () =>
+                set(
+                    produce(state => {
+                        state.connections[roomId].responseDataChannel = channel
+                        state.selectedConnection.responseDataChannel = channel
+                    })
+                ),
+            onclose: () =>
+                set(
+                    produce(state => {
+                        state.connections[roomId].responseDataChannel = undefined
+                        state.selectedConnection.responseDataChannel = undefined
+                    })
+                ),
+        }))
+
+        const unsubscribe = () => {
+            unsubscribeChannels()
+            unsubscribeSignal()
+        }
+
         const offer = roomSnapshot.data().offer
         await connection
             .setRemoteDescription(new RTCSessionDescription(offer))
             .catch(e => console.log('setRemoteDescription err B', e))
-        console.log('connection'.toUpperCase(), connection)
         const answer = await connection.createAnswer()
         await connection.setLocalDescription(answer).catch(e => console.log('setLocalDescription err B', e))
         const roomWithAnswer = {
@@ -208,8 +224,14 @@ export const useConnectionsStore = create<ConnectionStore>((set, get) => ({
             },
         }
         await room.update(roomWithAnswer)
+
         set(
             produce(state => {
+                state.selectedConnection = {
+                    connection,
+                    unsubscribe,
+                    dataChannel,
+                }
                 if (state.connections[roomId]) {
                     if (!state.connections[roomId].childConnections) state.connections[roomId].childConnections = []
                     state.connections[roomId].childConnections.push({

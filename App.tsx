@@ -11,6 +11,8 @@ import Playground from '@desktop-app/GameEngine/Playground'
 import TestWebRtc from './src/Connection/TestWebRtc'
 import TestJoinRoom from './src/Connection/TestJoinRoom'
 import { ConnectionStatus, ExistingRoom, TestCreateRoom } from './src/Connection/TestOneRoom'
+import { RaceViewPort } from './src/RaceViewPort/RaceViewPort'
+import { HelmView } from './src/RaceViewPort/HelmView/HelmView'
 
 const MainMenu = () => {
     const handleClick = async () => {
@@ -22,7 +24,7 @@ const MainMenu = () => {
     }
     return (
         <InnerLayout>
-            <Link style={{ fontSize: '5rem', color: 'white' }} to={'race'}>
+            <Link style={{ fontSize: '5rem', color: 'white' }} to={'new-race'}>
                 Start
             </Link>
             <Link style={{ fontSize: '5rem', color: 'white' }} to={'playground'}>
@@ -83,6 +85,14 @@ export const router = createHashRouter([
                 path: 'controllerView/:roomId',
                 element: <TestJoinRoom />,
             },
+            {
+                path: 'new-race',
+                element: <RaceViewPort />,
+            },
+            {
+                path: 'helm/:roomId',
+                element: <HelmView />,
+            },
         ],
     },
 ])
@@ -90,11 +100,7 @@ export const router = createHashRouter([
 const db = firebase.firestore()
 //const connectionService = new ConnectionService(db)
 const App = () => {
-    return (
-        <StrictMode>
-            <RouterProvider router={router} />
-        </StrictMode>
-    )
+    return <RouterProvider router={router} />
 }
 
 const root = createRoot(document.getElementById('app'))
