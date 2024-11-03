@@ -6,6 +6,7 @@ import { useParams } from 'react-router'
 import ConnectionContext from 'utils/connection/ConnectionContext'
 
 const filterRotation = deg => (deg > 180 ? deg - 360 : deg)
+const isAndroid = /(android)/i.test(navigator.userAgent);
 const checkPermission = async () =>
     // @ts-ignore
     !DeviceOrientationEvent?.requestPermission ||
@@ -58,7 +59,9 @@ const RemoteControlView = () => {
 
     useEffect(() => {
         if (active) {
+            isAndroid ?
             checkPermission().then(() => window.addEventListener('deviceorientation', handleMove))
+            : window.addEventListener('deviceorientation', handleMove)
         } else {
             window.removeEventListener('deviceorientation', handleMove)
         }
